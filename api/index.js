@@ -13,6 +13,7 @@ export default async function handle(req, res) {
     const glowColor = req.query.gc ? `#${req.query.gc}` : '#7e22ce';
     const foco = req.query.focus ? req.query.focus.toLowerCase() : null;
     const type = req.query.type ? req.query.type.toLowerCase() : 'default';
+    const langCount = Math.min(Math.max(parseInt(req.query.count) || 5, 4), 8);
 
     const url = `https://api.github.com/graphql`;
     const query = `
@@ -71,7 +72,7 @@ export default async function handle(req, res) {
 
         const linguagensFinais = Object.values(statusLinguagens)
             .sort((a, b) => b.tamanho - a.tamanho)
-            .slice(0, 5)
+            .slice(0, langCount)
             .map(lang => ({
                 nome: lang.nome,
                 cor: lang.cor,
@@ -91,6 +92,22 @@ export default async function handle(req, res) {
         let height = 280;
         let content = '';
         let hideDefaultCommitText = false;
+
+        let currentBarX = 0;
+        const barWidth = width - 90;
+        const languageBarSVG = `
+            <mask id="barMask">
+                <rect x="45" y="75" width="${barWidth}" height="8" rx="4" fill="white" />
+            </mask>
+            <g mask="url(#barMask)">
+                ${linguagensFinais.map((lang) => {
+                    const segmentWidth = (parseFloat(lang.porcentagem) / 100) * barWidth;
+                    const rect = `<rect x="${45 + currentBarX}" y="75" width="${segmentWidth}" height="8" fill="${lang.cor}" />`;
+                    currentBarX += segmentWidth;
+                    return rect;
+                }).join('')}
+            </g>
+        `;
 
         switch(type) {
             case 'full':
@@ -179,6 +196,7 @@ export default async function handle(req, res) {
                     <rect width="85" height="22" rx="11" fill="${rankColor}" fill-opacity="0.2" stroke="${rankColor}" stroke-width="1.2" />
                     <text x="42" y="15" text-anchor="middle" style="font: 700 10px sans-serif; fill: ${rankColor}; text-transform: uppercase;">${rank}</text>
                 </g>
+                ${(type !== 'stats') ? languageBarSVG : ''}
                 ${hideDefaultCommitText ? '' : `<text x="45" y="95" class="stat">🔥 Total de Commits: ${commits}</text>`}
                 ${content}
             </svg>
