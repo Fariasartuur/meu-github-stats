@@ -22,6 +22,16 @@ Diferente de outros geradores de widgets, esta API foi construída para ser **se
 3.  O backend processa as linguagens, soma os bytes e calcula as porcentagens.
 4.  Um arquivo **SVG** é gerado dinamicamente e retornado com cabeçalhos de cache.
 
+## 📊 Dados Coletados
+
+A API utiliza o protocolo **GraphQL** para extrair dados precisos com uma única requisição, evitando o overhead de múltiplas chamadas REST. Os dados coletados são:
+
+* **Commits:** Total de contribuições de commits no último ano (via `contributionsCollection`).
+* **Repositórios:** Analisa os últimos 100 repositórios onde você é o proprietário (`OWNER`).
+* **Visibilidade:** * Se o seu `GITHUB_TOKEN` tiver o escopo `public_repo`, ele lerá apenas dados **públicos**.
+    * Se o token tiver o escopo `repo`, ele incluirá estatísticas de repositórios **privados** no cálculo.
+* **Filtros de Projetos:** Projetos que são **Forks** são automaticamente excluídos do cálculo para garantir que as estatísticas reflitam apenas o seu código autoral.
+* **Estatísticas de Linguagens:** Extrai as 10 linguagens mais utilizadas em cada repositório, somando o tamanho em *bytes* de cada uma para gerar a média ponderada global.
 
 
 ## 🚀 Como fazer o seu (Self-Hosting)
