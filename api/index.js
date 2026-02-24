@@ -84,8 +84,9 @@ export default async function handle(req, res) {
         else if (commits > 1000) { rank = 'Ouro'; rankColor = '#ffd700'; }
         else if (commits > 400) { rank = 'Prata'; rankColor = '#c0c0c0'; }
 
-        // --- LÓGICA DE DIMENSÕES DINÂMICAS POR TIPO ---
         let widthParam = parseInt(req.query.w);
+        let heightParam = parseInt(req.query.h);
+
         let width = 450; 
         let height = 280;
         let content = '';
@@ -93,8 +94,8 @@ export default async function handle(req, res) {
 
         switch(type) {
             case 'full':
-                // Para o modo full (2 colunas), o mínimo é 500px para não espremer o texto
                 width = Math.min(Math.max(widthParam || 550, 500), 600);
+                height = heightParam || (95 + (linguagensFinais.length * 30) + 40);
                 hideDefaultCommitText = true;
                 content = `
                     <g transform="translate(45, 95)">
@@ -117,7 +118,7 @@ export default async function handle(req, res) {
                 break;
             case 'stats':
                 width = Math.min(Math.max(widthParam || 400, 300), 500);
-                height = 230;
+                height = heightParam || 230;
                 hideDefaultCommitText = true;
                 content = `
                     <g transform="translate(45, 95)">
@@ -130,7 +131,7 @@ export default async function handle(req, res) {
                 break;
             case 'langs':
                 width = Math.min(Math.max(widthParam || 400, 300), 500);
-                height = 95 + (linguagensFinais.length * 25) + 30;
+                height = heightParam || (95 + (linguagensFinais.length * 25) + 35);
                 hideDefaultCommitText = true;
                 content = `<g transform="translate(45, 95)">
                     ${linguagensFinais.map((lang, i) => {
@@ -143,9 +144,9 @@ export default async function handle(req, res) {
                     }).join('')}
                 </g>`;
                 break;
-            default: // DEFAULT
+            default:
                 width = Math.min(Math.max(widthParam || 450, 300), 550);
-                height = 125 + (linguagensFinais.length * 25) + 35;
+                height = heightParam || (125 + (linguagensFinais.length * 25) + 35);
                 hideDefaultCommitText = false;
                 content = `
                     <g transform="translate(45, 125)">
