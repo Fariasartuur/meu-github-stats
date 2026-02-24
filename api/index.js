@@ -84,6 +84,8 @@ export default async function handle(req, res) {
         else if (commits > 1000) { rank = 'Ouro'; rankColor = '#ffd700'; }
         else if (commits > 400) { rank = 'Prata'; rankColor = '#c0c0c0'; }
 
+        // --- LÓGICA DE DIMENSÕES DINÂMICAS POR TIPO ---
+        let widthParam = parseInt(req.query.w);
         let width = 450; 
         let height = 280;
         let content = '';
@@ -91,7 +93,8 @@ export default async function handle(req, res) {
 
         switch(type) {
             case 'full':
-                width = 550;
+                // Para o modo full (2 colunas), o mínimo é 500px para não espremer o texto
+                width = Math.min(Math.max(widthParam || 550, 500), 600);
                 hideDefaultCommitText = true;
                 content = `
                     <g transform="translate(45, 95)">
@@ -101,7 +104,7 @@ export default async function handle(req, res) {
                         <text y="75" class="stat">🔀 PRs: ${prs}</text>
                         <text y="100" class="stat">🛠️ Issues: ${issues}</text>
                     </g>
-                    <g transform="translate(300, 95)">
+                    <g transform="translate(${width * 0.55}, 95)">
                         ${linguagensFinais.map((lang, i) => {
                             const isFocus = foco === lang.nome.toLowerCase();
                             return `
@@ -114,6 +117,7 @@ export default async function handle(req, res) {
                     </g>`;
                 break;
             case 'stats':
+                width = Math.min(Math.max(widthParam || 400, 300), 500);
                 height = 230;
                 hideDefaultCommitText = true;
                 content = `
@@ -126,16 +130,23 @@ export default async function handle(req, res) {
                     </g>`;
                 break;
             case 'langs':
+                width = Math.min(Math.max(widthParam || 400, 300), 500);
+                height = 95 + (linguagensFinais.length * 25) + 30;
                 hideDefaultCommitText = true;
                 content = `<g transform="translate(45, 95)">
-                    ${linguagensFinais.map((lang, i) => `
-                        <g transform="translate(0, ${i * 25})">
+                    ${linguagensFinais.map((lang, i) => {
+                        const isFocus = foco === lang.nome.toLowerCase();
+                        return `
+                        <g transform="translate(0, ${i * 25})" ${isFocus ? `filter="drop-shadow(0 0 5px ${lang.cor})"` : ''}>
                             <circle cx="5" cy="5" r="5" fill="${lang.cor}" />
-                            <text x="20" y="9" class="lang-text">${lang.nome} - ${lang.porcentagem}%</text>
-                        </g>`).join('')}
+                            <text x="20" y="9" class="lang-text">${lang.nome} - ${lang.porcentagem}% ${isFocus ? '🎯' : ''}</text>
+                        </g>`;
+                    }).join('')}
                 </g>`;
                 break;
-            default:
+            default: // DEFAULT
+                width = Math.min(Math.max(widthParam || 450, 300), 550);
+                height = 125 + (linguagensFinais.length * 25) + 35;
                 hideDefaultCommitText = false;
                 content = `
                     <g transform="translate(45, 125)">
@@ -164,7 +175,7 @@ export default async function handle(req, res) {
                 </style>
                 <rect width="${width - 40}" height="${height - 40}" x="20" y="20" rx="25" fill="${bgColor}" stroke="${borderColor}" stroke-width="1.5" filter="url(#neonGlow)" />
                 <text x="45" y="55" class="title">${nome}'s GitHub Stats</text>
-                <g transform="translate(${width - 120}, 38)">
+                <g transform="translate(${width - 125}, 38)">
                     <rect width="85" height="22" rx="11" fill="${rankColor}" fill-opacity="0.2" stroke="${rankColor}" stroke-width="1.2" />
                     <text x="42" y="15" text-anchor="middle" style="font: 700 10px sans-serif; fill: ${rankColor}; text-transform: uppercase;">${rank}</text>
                 </g>
@@ -177,7 +188,6 @@ export default async function handle(req, res) {
         res.setHeader('Cache-Control', 'public, max-age=7200');
         res.setHeader('Access-Control-Allow-Origin', '*');
         return res.status(200).send(svgCard);
-
     } catch (error) {
         return res.status(500).json({ erro: error.message });
     }
