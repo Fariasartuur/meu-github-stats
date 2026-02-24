@@ -7,7 +7,7 @@ export default async (req, res) => {
     const {
         bgc,
         tc,
-        st,
+        stc,
         bc,
         gc,
         f,
