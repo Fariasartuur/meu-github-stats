@@ -89,7 +89,6 @@ export default async function handle(req, res) {
         if (type === 'full' || (type === 'langs' && linguagensFinais.length > 4)) width = Math.min(Math.max(widthParam || 550, 500), 650);
         else width = Math.min(Math.max(widthParam || 450, 300), 550);
 
-        // --- CORREÇÃO DA BARRA ARREDONDADA ---
         let currentBarX = 0;
         const barWidth = width - 90;
         const barSegments = linguagensFinais.map((lang, index) => {
@@ -120,7 +119,7 @@ export default async function handle(req, res) {
                 height = heightParam || (125 + Math.max(5, Math.ceil(linguagensFinais.length)) * 30);
                 hideDefaultCommitText = true;
                 content = `
-                    <g transform="translate(45, 120)">
+                    <g transform="translate(45, 115)">
                         <text y="0" class="stat">🔥 Commits: ${commits}</text>
                         <text y="25" class="stat">⭐ Stars: ${stars}</text>
                         <text y="50" class="stat">📂 Repos: ${repos}</text>
@@ -137,7 +136,7 @@ export default async function handle(req, res) {
                 if (linguagensFinais.length > 4) {
                     // DUAS COLUNAS PARA MAIS DE 4 LANGS
                     height = heightParam || 200;
-                    const mid = Math.ceil(linguagensFinais.length / 2);
+                    const mid = Math.ceil(linguagensFinais.length / 2) + 1;
                     content = `
                         <g transform="translate(45, 115)">
                             ${linguagensFinais.slice(0, mid).map((lang, i) => renderLangItem(lang, i)).join('')}
