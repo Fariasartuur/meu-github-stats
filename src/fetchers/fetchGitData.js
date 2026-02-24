@@ -11,12 +11,19 @@ export const fetchGitData = async () => {
         });
 
         if (!response.ok) {
-            throw new Error(`GitHub API error: ${response.status} ${response.statusText}`);
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || `GitHub API: ${response.status}`);
         }
 
-        return response.json();
+        const data = await response.json();
+        
+        if (data.errors) {
+            throw new Error(`GraphQL Error: ${data.errors[0].message}`);
+        }
+
+        return data;
     } catch (error) {
-        console.error("Error fetching GitHub data:", error);
+        console.error("Fetch Error:", error.message);
         throw error;
     }
 };

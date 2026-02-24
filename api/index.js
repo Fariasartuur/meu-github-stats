@@ -1,12 +1,12 @@
-import { fetchGitData } from "../src/fetchers/fetchGitData";
+import { fetchGitData } from "../src/fetchers/fetchGitData.js";
 
-import { getStats } from "../src/utils/getStats";
-import { getLanguages } from "../src/utils/getLanguages";
-import { getParams } from "../src/utils/getParams";
-import { getContent } from "../src/utils/getContent";
+import { getStats } from "../src/utils/getStats.js";
+import { getLanguages } from "../src/utils/getLanguages.js";
+import { getParams } from "../src/utils/getParams.js";
+import { getContent } from "../src/utils/getContent.js";
 
-import { Badge } from "../src/components/Badge";
-import { renderLanguageBar } from "../src/components/LanguageBar";
+import { Badge } from "../src/components/Badge.js";
+import { renderLanguageBar } from "../src/components/LanguageBar.js";
 
 export default async (req, res) => {
     const {

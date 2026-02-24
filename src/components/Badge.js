@@ -1,4 +1,4 @@
-import { getRankColor } from "../utils/getRankColor"
+import { getRankColor } from "../utils/getRankColor.js"
 
 export const Badge = (stars, width) => {
     const {rank, rankColor} = getRankColor(stars);
