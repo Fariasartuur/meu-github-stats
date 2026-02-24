@@ -27,10 +27,10 @@ export default async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
 
     const params = getParams(req.query);
-    const { 
-        hideDefaultCommitText, bgColor, titleColor, statColor, 
-        borderColor, glowColor, focus, type, count, 
-        widthParam, heightParam 
+    const {
+        hideDefaultCommitText, bgColor, titleColor, statColor,
+        borderColor, glowColor, focus, type, count,
+        widthParam, heightParam
     } = params;
 
     const dados = await fetchGitData();
@@ -41,25 +41,40 @@ export default async (req, res) => {
     let height = 280;
 
     try {
+        let shouldHideCommit = (type === 'stats') || hideDefaultCommitText;
+
         if (type === 'full' || (type === 'langs' && linguagensFinais.length > 4)) {
             width = Math.min(Math.max(widthParam || 550, 500), 650);
-        }else {
+        } else {
             width = Math.min(Math.max(widthParam || 450, 300), 550);
         }
 
         const rankBadgeSVG = Badge(stars, width);
         const { clipPath, barSVG } = renderLanguageBar(linguagensFinais, width);
 
-        const content = getContent({ 
-            type, 
-            stats: { commits, prs, issues, repos, stars }, 
-            linguagens: linguagensFinais, width, focus });
+        const content = getContent({
+            hideDefaultCommitText,
+            type,
+            stats: { commits, prs, issues, repos, stars },
+            linguagens: linguagensFinais, width, focus
+        });
 
         if (!heightParam) {
-            if (type === 'full') height = 125 + Math.max(5, linguagensFinais.length) * 30;
-            else if (type === 'langs') height = linguagensFinais.length > 4 ? 200 : 110 + (linguagensFinais.length * 25) + 35;
-            else if (type === 'stats') height = 230;
-            else height = 145 + (linguagensFinais.length * 25) + 35;
+            if (type === 'full') {
+                const contentHeight = Math.max(5, linguagensFinais.length) * 30;
+                height = 120 + contentHeight + 20;
+            }
+            else if (type === 'langs') {
+                const rows = linguagensFinais.length > 4 ? Math.ceil(linguagensFinais.length / 2) + 1 : linguagensFinais.length;
+                height = 100 + (rows * 30) + 20;
+            }
+            else if (type === 'stats') {
+                height = 230;
+            }
+            else {
+                const baseHeight = shouldHideCommit ? 100 : 145;
+                height = baseHeight + (linguagensFinais.length * 28) + 20;
+            }
         } else {
             height = heightParam;
         }
@@ -81,7 +96,7 @@ export default async (req, res) => {
                 <text x="45" y="55" class="title">${usuario.name}'s GitHub Stats</text>
                 ${rankBadgeSVG}
                 ${(type !== 'stats') ? barSVG : ''}
-                ${hideDefaultCommitText ? '' : `<text x="45" y="115" class="stat">🔥 Total de Commits: ${commits}</text>`}
+                ${shouldHideCommit ? '' : `<text x="45" y="115" class="stat">🔥 Total de Commits: ${commits}</text>`}
                 ${content}
             </svg>
         `;

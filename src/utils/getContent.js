@@ -1,7 +1,7 @@
 import { LangItem } from "../components/LangItem.js";
 
 export const getContent = (props) => {
-    const { type, stats, linguagens, width, focus } = props;
+    const { type, stats, linguagens, width, focus, hideDefaultCommitText } = props;
     const { commits, prs, issues, repos, stars } = stats;
 
     switch (type) {
