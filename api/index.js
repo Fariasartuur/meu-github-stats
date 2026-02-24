@@ -2,6 +2,9 @@ export default async function handle(req, res) {
 
     const myUser = process.env.MY_GITHUB_USER;
     const token = process.env.GITHUB_TOKEN;
+    const bgColor = req.query.bg ? `#${req.query.bg}` : '#3c0366';
+    const titleColor = req.query.t ? `#${req.query.t}` : '#d8b4fe';
+    const statColor = req.query.st ? `#${req.query.st}` : '#f3e8ff';
 
     if( !myUser || !token ) {
         return res.status(500).json({ erro: "Servidor mal configurado: Faltam variáveis." });
@@ -109,13 +112,13 @@ export default async function handle(req, res) {
                 </defs>
 
                 <style>
-                    .title { font: 600 18px 'Segoe UI', Ubuntu, sans-serif; fill: #d8b4fe; } 
-                    .stat { font: 600 14px 'Segoe UI', Ubuntu, sans-serif; fill: #f3e8ff; }
-                    .lang-text { font: 500 13px 'Segoe UI', Ubuntu, sans-serif; fill: #f3e8ff; }
+                    .title { font: 600 18px 'Segoe UI', Ubuntu, sans-serif; fill: ${titleColor}; } 
+                    .stat { font: 600 14px 'Segoe UI', Ubuntu, sans-serif; fill: ${statColor}; }
+                    .lang-text { font: 500 13px 'Segoe UI', Ubuntu, sans-serif; fill: ${statColor}; }
                 </style>
                 
                 <rect width="360" height="240" x="20" y="20" rx="25" 
-                      fill="#3c0366" 
+                      fill="${bgColor}" 
                       stroke="rgba(126, 34, 206, 0.5)" 
                       stroke-width="1.5" 
                       filter="url(#neonGlow)" />
