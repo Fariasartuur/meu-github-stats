@@ -6,7 +6,7 @@ import { getParams } from "../src/utils/getParams.js";
 import { getContent } from "../src/utils/getContent.js";
 
 import { Badge } from "../src/components/Badge.js";
-import { renderLanguageBar } from "../src/components/LanguageBar.js";
+import { renderLanguageBar } from "../src/components/Bar.js";
 
 export default async (req, res) => {
     const {
