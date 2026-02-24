@@ -18,7 +18,7 @@ export const getDimensions = (params, linguagensCount) => {
         }
         else if (type === 'langs') {
             const rows = linguagensCount > 4 ? Math.ceil(linguagensCount / 2) + 1 : linguagensCount;
-            height = 100 + (rows * ROW_HEIGHT) + 20;
+            height = 110 + (rows * ROW_HEIGHT) + 20;
         }
         else if (type === 'stats') {
             height = 230;
