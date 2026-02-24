@@ -110,8 +110,7 @@ export default async function handle(req, res) {
                             return `
                             <g transform="translate(0, ${i * 30})" ${isFocus ? `filter="drop-shadow(0 0 3px ${lang.cor})"` : ''}>
                                 <circle cx="5" cy="5" r="5" fill="${lang.cor}" />
-                                <text x="20" y="9" class="lang-text">${lang.nome} ${isFocus ? '🎯' : ''}</text>
-                                <text x="20" y="22" class="lang-text" font-size="10" opacity="0.7">${lang.porcentagem}%</text>
+                                <text x="20" y="9" class="lang-text">${lang.nome} - ${lang.porcentagem}% ${isFocus ? '🎯' : ''}</text>
                             </g>`;
                         }).join('')}
                     </g>`;
