@@ -16,7 +16,7 @@ export default async function handle(req, res) {
           contributionsCollection {
             totalCommitContributions
           }
-          repositories(ownerAffiliations: OWNER) {
+          repositories(first: 100, ownerAffiliations: OWNER, isFork: false) {
             nodes {
               name
               languages(first: 10, orderBy: {field: SIZE, direction: DESC}) {
