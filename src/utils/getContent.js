@@ -1,8 +1,10 @@
 import { LangItem } from "../components/LangItem.js";
 
 export const getContent = (props) => {
-    const { type, stats, linguagens, width, focus, hideDefaultCommitText } = props;
+    const { type, stats, linguagens, width, focus } = props;
     const { commits, prs, issues, repos, stars } = stats;
+
+    const rowHeight = 30;
 
     switch (type) {
         case 'full':
@@ -46,6 +48,7 @@ export const getContent = (props) => {
 
         default:
             return `
+                <text x="45" y="115" class="stat">🔥 Total de Commits: ${commits}</text>
                 <g transform="translate(45, 145)">
                     ${linguagens.map((lang, i) => LangItem(lang, i, 0, focus)).join('')}
                 </g>`;

@@ -1,6 +1,5 @@
 export const getParams = (query) => {
     return {
-        hideCommit : query.hideCommit ? query.hideCommit.toLowerCase() === 'true' : false,
         bgColor : query.bgc ? `#${query.bgc}` : '#3c0366',
         titleColor: query.tc ? `#${query.tc}` : '#d8b4fe',
         statColor: query.stc ? `#${query.stc}` : '#f3e8ff',
