@@ -125,7 +125,7 @@ export default async function handle(req, res) {
                 height = heightParam || (125 + (linguagensFinais.length * 30) + 40);
                 hideDefaultCommitText = true;
                 content = `
-                    <g transform="translate(45, 95)">
+                    <g transform="translate(45, 120)">
                         <text y="0" class="stat">🔥 Commits: ${commits}</text>
                         <text y="25" class="stat">⭐ Stars: ${stars}</text>
                         <text y="50" class="stat">📂 Repos: ${repos}</text>
@@ -160,7 +160,7 @@ export default async function handle(req, res) {
                 width = Math.min(Math.max(widthParam || 400, 300), 500);
                 height = heightParam || (110 + (linguagensFinais.length * 25) + 35);
                 hideDefaultCommitText = true;
-                content = `<g transform="translate(45, 95)">
+                content = `<g transform="translate(45, 115)">
                     ${linguagensFinais.map((lang, i) => {
                         const isFocus = foco === lang.nome.toLowerCase();
                         return `
@@ -176,7 +176,7 @@ export default async function handle(req, res) {
                 height = heightParam || (145 + (linguagensFinais.length * 25) + 35);
                 hideDefaultCommitText = false;
                 content = `
-                    <g transform="translate(45, 125)">
+                    <g transform="translate(45, 145)">
                         ${linguagensFinais.map((lang, i) => {
                             const isFocus = foco === lang.nome.toLowerCase();
                             return `
