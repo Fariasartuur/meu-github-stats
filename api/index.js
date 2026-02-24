@@ -93,16 +93,19 @@ export default async function handle(req, res) {
         let content = '';
         let hideDefaultCommitText = false;
 
+        if (type === 'full') width = Math.min(Math.max(widthParam || 550, 500), 650);
+        else width = Math.min(Math.max(widthParam || 450, 300), 550);
+
         let currentBarX = 0;
         const barWidth = width - 90;
         const languageBarSVG = `
             <mask id="barMask">
-                <rect x="45" y="75" width="${barWidth}" height="8" rx="4" fill="white" />
+                <rect x="45" y="80" width="${barWidth}" height="8" rx="5" fill="white" />
             </mask>
             <g mask="url(#barMask)">
                 ${linguagensFinais.map((lang) => {
                     const segmentWidth = (parseFloat(lang.porcentagem) / 100) * barWidth;
-                    const rect = `<rect x="${45 + currentBarX}" y="75" width="${segmentWidth}" height="8" fill="${lang.cor}" />`;
+                    const rect = `<rect x="${45 + currentBarX}" y="80" width="${segmentWidth}" height="8" fill="${lang.cor}" />`;
                     currentBarX += segmentWidth;
                     return rect;
                 }).join('')}
@@ -111,8 +114,7 @@ export default async function handle(req, res) {
 
         switch(type) {
             case 'full':
-                width = Math.min(Math.max(widthParam || 550, 500), 600);
-                height = heightParam || (95 + (linguagensFinais.length * 30) + 40);
+                height = heightParam || (125 + (linguagensFinais.length * 30) + 40);
                 hideDefaultCommitText = true;
                 content = `
                     <g transform="translate(45, 95)">
@@ -148,7 +150,7 @@ export default async function handle(req, res) {
                 break;
             case 'langs':
                 width = Math.min(Math.max(widthParam || 400, 300), 500);
-                height = heightParam || (95 + (linguagensFinais.length * 25) + 35);
+                height = heightParam || (110 + (linguagensFinais.length * 25) + 35);
                 hideDefaultCommitText = true;
                 content = `<g transform="translate(45, 95)">
                     ${linguagensFinais.map((lang, i) => {
@@ -163,7 +165,7 @@ export default async function handle(req, res) {
                 break;
             default:
                 width = Math.min(Math.max(widthParam || 450, 300), 550);
-                height = heightParam || (125 + (linguagensFinais.length * 25) + 35);
+                height = heightParam || (145 + (linguagensFinais.length * 25) + 35);
                 hideDefaultCommitText = false;
                 content = `
                     <g transform="translate(45, 125)">
