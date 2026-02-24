@@ -60,7 +60,7 @@ export default async function handle(req, res) {
         let totalBytes = 0;
 
         repositorios.forEach(repo => {
-            if(repo.languages.edges.lenght > 0) {
+            if(repo.languages.edges.length > 0) {
                 repo.languages.edges.forEach(edge => {
                     const nome = edge.node.name;
                     const cor = edge.node.color;
