@@ -62,6 +62,7 @@ A API aceita par√¢metros via URL para customizar o tema sem precisar mexer no c√
 | `gc` | Cor do brilho (Glow) | `gc=7e22ce` |
 | `focus` | Linguagem de foco | `Java`
 | `type` | Tipo de card | `full` |
+| `count` | Quantidade de Linguagens a exibir | `2` |
 
 ### Larguras dos Cards
 
