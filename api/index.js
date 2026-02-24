@@ -134,7 +134,11 @@ export default async function handle(req, res) {
         return res.status(200).send(svgCard);
 
     } catch (error) {
-        return res.status(500).json({ erro: "Erro ao buscar dados do GitHub." });
+        return res.status(500).json({ 
+            erro: error.message, 
+            stack: error.stack,
+            detalhe: "Verifique os Logs no Dashboard da Vercel"
+        });
     }
 
 
