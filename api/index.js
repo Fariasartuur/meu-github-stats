@@ -56,10 +56,41 @@ export default async function handle(req, res) {
         const totalCommits = usuario.contributionsCollection.totalCommitContributions;
         const repositorios = usuario.repositories.nodes;
 
+        const statusLinguagens = {};
+        let totalBytes = 0;
+
+        repositorios.forEach(repo => {
+            if(repo.languages.edges.lenght > 0) {
+                repo.languages.edges.forEach(edge => {
+                    const nome = edge.node.name;
+                    const cor = edge.node.color;
+                    const tamanho = edge.size;
+
+                    if(!statusLinguagens[nome]) {
+                        statusLinguagens[nome] = { nome: nome, cor: cor, tamanho: 0 };
+                    }
+
+                    statusLinguagens[nome].tamanho += tamanho;
+                    totalBytes += tamanho;
+                });
+            }
+        });
+
+        const linguagensFinais = Object.values(statusLinguagens)
+            .sort((a, b) => b.tamanho - a.tamanho)
+            .map(lang => {
+                return {
+                    nome: lang.nome,
+                    cor: lang.cor,
+                    porcentagem: totalBytes > 0 ? ((lang.tamanho / totalBytes) * 100).toFixed(2) : "0.00"
+                };
+            })
+            .slice(0, 5);
+
         return res.status(200).json({
             nome: nome,
             commits: totalCommits,
-            repositorios_brutos: repositorios
+            linguagens: linguagensFinais
         });
 
     } catch (error) {
