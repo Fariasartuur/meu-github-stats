@@ -129,6 +129,7 @@ export default async function handle(req, res) {
 
         res.setHeader('Content-Type', 'image/svg+xml');
         res.setHeader('Cache-Control', 'public, max-age=7200');
+        res.setHeader('Access-Control-Allow-Origin', '*');
 
         return res.status(200).send(svgCard);
 
