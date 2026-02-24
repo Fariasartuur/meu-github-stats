@@ -9,12 +9,12 @@ export const getContent = (props) => {
     switch (type) {
         case 'full':
             return `
-                <g transform="translate(45, 120)">
-                    <text y="0" class="stat">🔥 Commits: ${commits}</text>
-                    <text y="25" class="stat">⭐ Stars: ${stars}</text>
-                    <text y="50" class="stat">📂 Repos: ${repos}</text>
-                    <text y="75" class="stat">🔀 PRs: ${prs}</text>
-                    <text y="100" class="stat">🛠️ Issues: ${issues}</text>
+                <g transform="translate(45, 115)">
+                    <text y="15" class="stat">🔥 Commits: ${commits}</text>
+                    <text y="45" class="stat">⭐ Stars: ${stars}</text>
+                    <text y="75" class="stat">📂 Repos: ${repos}</text>
+                    <text y="105" class="stat">🔀 PRs: ${prs}</text>
+                    <text y="135" class="stat">🛠️ Issues: ${issues}</text>
                 </g>
                 <g transform="translate(${width * 0.55}, 115)">
                     ${linguagens.map((lang, i) => LangItem(lang, i, 0, focus)).join('')}
