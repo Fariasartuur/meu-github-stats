@@ -100,4 +100,4 @@ Existem alguns tipos de cards que podem ser alternados usando o parametro `type`
 
 **Exemplo de uso no Markdown:**
 ```markdown
-![Stats](https://seu-projeto.vercel.app/api?bg=020618&t=d8b4fe&bc=7e22ce)
+![Stats](https://seu-projeto.vercel.app/api?bgc=020618&tc=d8b4fe&bc=7e22ce)
