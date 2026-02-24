@@ -8,27 +8,12 @@ export default async function handle(req, res) {
     const statColor = req.query.st ? `#${req.query.st}` : '#f3e8ff';
     const width = Math.min(Math.max(parseInt(req.query.w) || 400, 300), 550);
 
-    const calculatedHeight = 120 + (linguagensFinais.length * 25) + 30;
-    const height = Math.min(Math.max(calculatedHeight, 150), 450);
-
     const borderColor = req.query.bc ? `#${req.query.bc}` : 'rgba(126, 34, 206, 0.5)';
     const glowColor = req.query.gc ? `#${req.query.gc}` : '#7e22ce';
 
     const foco = req.query.focus ? req.query.focus.toLowerCase() : null;
 
-    let rank = 'Bronze';
-    let rankColor = '#cd7f32';
-
-    if (totalCommits >= 1500) {
-        rank = 'Diamante';
-        rankColor = '#00e5ff';
-    } else if (totalCommits > 1000) {
-        rank = 'Ouro';
-        rankColor = '#ffd700';
-    } else if (totalCommits > 400) {
-        rank = 'Prata';
-        rankColor = '#c0c0c0';
-    }
+    
 
     if( !myUser || !token ) {
         return res.status(500).json({ erro: "Servidor mal configurado: Faltam variáveis." });
@@ -113,6 +98,15 @@ export default async function handle(req, res) {
                 };
             })
             .slice(0, 5);
+
+        let rank = 'Bronze';
+        let rankColor = '#cd7f32';
+        if (totalCommits >= 1500) { rank = 'Diamante'; rankColor = '#00e5ff'; }
+        else if (totalCommits > 1000) { rank = 'Ouro'; rankColor = '#ffd700'; }
+        else if (totalCommits > 400) { rank = 'Prata'; rankColor = '#c0c0c0'; }
+
+        const calculatedHeight = 120 + (linguagensFinais.length * 25) + 30;
+        const height = Math.min(Math.max(calculatedHeight, 150), 450);
 
         let linguagensSVG = ''
 
