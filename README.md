@@ -3,10 +3,10 @@
 Uma API Serverless desenvolvida em **Node.js** e hospedada na **Vercel** que gera cards de estatísticas dinâmicos com efeito Neon/Glassmorphism para perfis do GitHub.
 
 <div align="center">
-  <img src="https://meu-github-stats.vercel.app/api?bg=020618&t=d8b4fe&st=f3e8ff&bc=7e22ce&gc=7e22ce&w=450" alt="Estatísticas Demo" />
+  <img src="https://meu-github-stats.vercel.app/api?bgc=020618&tc=d8b4fe&st=f3e8ff&bc=7e22ce&gc=7e22ce&w=450" alt="Estatísticas Demo" />
 </div>
 
-> Url do Card acima: https://meu-github-stats.vercel.app/api?bg=020618&t=d8b4fe&st=f3e8ff&bc=7e22ce&gc=7e22ce&w=450
+> **URL do Card acima:** `https://meu-github-stats.vercel.app/api?bgc=020618&tc=d8b4fe&stc=f3e8ff&bc=7e22ce&gc=7e22ce&w=450`
 
 ## 🛠️ Tecnologias Utilizadas
 
@@ -19,85 +19,76 @@ Uma API Serverless desenvolvida em **Node.js** e hospedada na **Vercel** que ger
 
 Diferente de outros geradores de widgets, esta API foi construída para ser **self-hosted**, garantindo que você nunca sofra com *rate limit* da API do GitHub, pois ela utiliza o seu próprio Personal Access Token.
 
-1.  A requisição chega à Vercel.
-2.  A função faz uma query **GraphQL** para o GitHub buscando Commits e Linguagens.
-3.  O backend processa as linguagens, soma os bytes e calcula as porcentagens.
-4.  Um arquivo **SVG** é gerado dinamicamente e retornado com cabeçalhos de cache.
+1. A requisição chega à Vercel.
+2. A função faz uma query **GraphQL** para o GitHub buscando Commits e Linguagens.
+3. O backend processa as linguagens, soma os bytes e calcula as porcentagens.
+4. Um arquivo **SVG** é gerado dinamicamente com dimensões calculadas em tempo real.
 
 ## 📊 Dados Coletados
 
-A API utiliza o protocolo **GraphQL** para extrair dados precisos com uma única requisição, evitando o overhead de múltiplas chamadas REST. Os dados coletados são:
+A API utiliza o protocolo **GraphQL** para extrair dados precisos com uma única requisição. Os dados coletados são:
 
-* **Commits:** Total de contribuições de commits no último ano (via `contributionsCollection`).
-* **Repositórios:** Analisa os últimos 100 repositórios onde você é o proprietário (`OWNER`).
-* **Visibilidade:** * Se o seu `GITHUB_TOKEN` tiver o escopo `public_repo`, ele lerá apenas dados **públicos**.
-    * Se o token tiver o escopo `repo`, ele incluirá estatísticas de repositórios **privados** no cálculo.
-* **Filtros de Projetos:** Projetos que são **Forks** são automaticamente excluídos do cálculo para garantir que as estatísticas reflitam apenas o seu código autoral.
-* **Estatísticas de Linguagens:** Extrai as 10 linguagens mais utilizadas em cada repositório, somando o tamanho em *bytes* de cada uma para gerar a média ponderada global.
-
+* **Commits:** Total de contribuições de commits no último ano.
+* **Repositórios:** Analisa os últimos 100 repositórios de sua propriedade.
+* **Filtros:** Forks são automaticamente excluídos para refletir apenas seu código autoral.
+* **Linguagens:** Soma o tamanho em *bytes* de cada linguagem para gerar uma média ponderada.
 
 ## 🚀 Como fazer o seu (Self-Hosting)
 
-1.  **Faça um Fork** deste repositório.
-2.  **Gere um Token:** Vá em [GitHub Settings](https://github.com/settings/tokens) e crie um *Personal Access Token (Classic)* com a permissão `public_repo` (ou `repo` para incluir dados privados).
-3.  **Deploy na Vercel:**
-    * Crie um novo projeto na Vercel e importe seu fork.
-    * Configure as seguintes **Environment Variables**:
-        * `GITHUB_TOKEN`: O token que você gerou.
-        * `MY_GITHUB_USER`: Seu nome de usuário do GitHub.
-4.  **Acesse:** `https://seu-projeto.vercel.app/api`
+1. **Faça um Fork** deste repositório.
+2. **Gere um Token:** No GitHub, crie um *Personal Access Token (Classic)* com a permissão `public_repo` (ou `repo` para dados privados).
+3. **Deploy na Vercel:**
+    * Importe seu fork na Vercel.
+    * Configure as **Environment Variables**: `GITHUB_TOKEN` e `MY_GITHUB_USER`.
+4. **Acesse:** `https://seu-projeto.vercel.app/api`
 
 ## 🎨 Customização (Query Params)
 
-A API aceita parâmetros via URL para customizar o tema sem precisar mexer no código:
-
-### Customização Normal
-
 | Parâmetro | Descrição | Exemplo |
 | :--- | :--- | :--- |
-| `bg` | Cor de fundo (Hex sem #) | `bg=000000` |
-| `t` | Cor do título | `t=ff00ea` |
-| `st` | Cor dos textos | `st=ffffff` |
-| `bc` | Cor da borda | `bc=444444` |
+| `bgc` | Cor de fundo (Hex sem #) | `bgc=020618` |
+| `tc` | Cor do título | `tc=d8b4fe` |
+| `st` | Cor dos textos/estatísticas | `st=f3e8ff` |
+| `bc` | Cor da borda | `bc=7e22ce` |
 | `gc` | Cor do brilho (Glow) | `gc=7e22ce` |
-| `focus` | Linguagem de foco | `Java`
-| `type` | Tipo de card | `full` |
-| `count` | Quantidade de Linguagens a exibir | `2` |
+| `f` | Linguagem em foco (Efeito Neon) | `f=java` |
+| `t` | Tipo de card (`stats`, `langs`, `full`) | `t=full` |
+| `c` | Quantidade de linguagens a exibir | `c=5` |
+| `w` | Largura customizada | `w=500` |
+| `h` | Altura customizada (Sobrescreve o auto) | `h=300` |
 
-### Larguras dos Cards
+### 📐 Dimensões Inteligentes
 
-| Parâmetro | Padrão | Minimo | Maximo | Tipo
-| :--- | :--- | :--- | :--- | :--- | 
-| `w` | `450` | `300` | `550` | Padrão |
-| `w` | `400` | `300` | `500` | `stats` |
-| `w` | `400` | `300` | `500` | `langs` |
-| `w` | `550` | `500` | `600` | `full` |
+As dimensões são ajustadas automaticamente com base no `rowHeight` de 30px para garantir alinhamento perfeito.
 
+| Tipo | Largura Padrão | Faixa Suportada (w) | Altura Automática |
+| :--- | :--- | :--- | :--- |
+| **Padrão** | `450px` | `300` a `550` | `145 + (langs * 30) + 20` |
+| **`stats`** | `400px` | `300` a `500` | `230` (Fixo) |
+| **`langs`** | `450px` | `300` a `550` | `110 + (linhas * 30) + 20` |
+| **`full`** | `550px` | `500` a `650` | `120 + (max(5, langs) * 30) + 20` |
 
-### Altura dos cards
+---
 
-Calculado automaticamente dependendo do número de linguagens ou de status. Pode ser alterada usando o parametro `h`. Não tem um limite.
+## 🎨 Exemplos de Temas
 
-## Cards
+### 💜 Ultra Violet (Focus em Java)
 
-Existem alguns tipos de cards que podem ser alternados usando o parametro `type`.
+`?bgc=020617&tc=a855f7&stc=e9d5ff&bc=7e22ce&gc=a855f7&f=java&t=full`
 
-- Padrão
+<img src="https://meu-github-stats.vercel.app/api??bgc=020617&tc=a855f7&stc=e9d5ff&bc=7e22ce&gc=a855f7&f=java&t=full" alt="Ultra Violet" />
 
-<img src="https://meu-github-stats.vercel.app/api" alt="Estatísticas Demo" />
+### 🟢 Matrix Mode
 
-- `stats`
+`?bgc=000000&tc=00ff41&stc=d1ffd6&bc=003b00&gc=00ff41&t=stats`
 
-<img src="https://meu-github-stats.vercel.app/api?type=stats" alt="Estatísticas Demo" />
+<img src="https://meu-github-stats.vercel.app/api?bgc=000000&tc=00ff41&stc=d1ffd6&bc=003b00&gc=00ff41&t=stats" alt="Matrix  Mode" />
 
-- `langs`
+### 🧊 Minimalist Blue
 
-<img src="https://meu-github-stats.vercel.app/api?type=langs" alt="Estatísticas Demo" />
+`?bgc=f0f9ff&tc=0ea5e9&stc=075985&bc=bae6fd&gc=0ea5e9&t=langs&c=5`
 
-- `full`
+<img src="https://meu-github-stats.vercel.app/api?bgc=f0f9ff&tc=0ea5e9&stc=075985&bc=bae6fd&gc=0ea5e9&t=langs&c=5" alt="Minimalist Blue" />
 
-<img src="https://meu-github-stats.vercel.app/api?type=full" alt="Estatísticas Demo" />
-
-**Exemplo de uso no Markdown:**
-```markdown
-![Stats](https://seu-projeto.vercel.app/api?bgc=020618&tc=d8b4fe&bc=7e22ce)
+---
+Criado por [Artur](https://github.com/Artuur)
