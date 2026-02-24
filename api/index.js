@@ -87,11 +87,50 @@ export default async function handle(req, res) {
             })
             .slice(0, 5);
 
-        return res.status(200).json({
-            nome: nome,
-            commits: totalCommits,
-            linguagens: linguagensFinais
+        let linguagensSVG = ''
+
+        linguagensFinais.forEach((lang, index) => {
+            let yPos = 130 + (index * 25);
+
+            linguagensSVG += `
+                <g transform="translate(45, ${yPos})">
+                    <circle cx="5" cy="5" r="5" fill="${lang.cor}" />
+                    <text x="20" y="9" class="lang-text">${lang.nome} - ${lang.porcentagem}%</text>
+                </g>
+            `;
         });
+
+        const svgCard = `
+            <svg width="400" height="280" viewBox="0 0 400 280" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
+                        <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="#7e22ce" flood-opacity="0.4"/>
+                    </filter>
+                </defs>
+
+                <style>
+                    .title { font: 600 18px 'Segoe UI', Ubuntu, sans-serif; fill: #d8b4fe; } 
+                    .stat { font: 600 14px 'Segoe UI', Ubuntu, sans-serif; fill: #f3e8ff; }
+                    .lang-text { font: 500 13px 'Segoe UI', Ubuntu, sans-serif; fill: #f3e8ff; }
+                </style>
+                
+                <rect width="360" height="240" x="20" y="20" rx="25" 
+                      fill="#3c0366" 
+                      stroke="rgba(126, 34, 206, 0.5)" 
+                      stroke-width="1.5" 
+                      filter="url(#neonGlow)" />
+                
+                <text x="45" y="55" class="title">${nome}'s GitHub Stats</text>
+                <text x="45" y="95" class="stat">🔥 Total de Commits: ${commits}</text>
+                
+                ${linguagensSVG}
+            </svg>
+        `;
+
+        res.setHeader('Content-Type', 'image/svg+xml');
+        res.setHeader('Cache-Control', 'public, max-age=7200');
+
+        return res.status(200).send(svgCard);
 
     } catch (error) {
         return res.status(500).json({ erro: "Erro ao buscar dados do GitHub." });
