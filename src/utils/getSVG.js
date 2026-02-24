@@ -14,6 +14,14 @@ export const getSVG = (params, dados) => {
         borderColor, glowColor, focus, type, count
     } = params;
 
+    const formatColor = (clr) => clr && !clr.startsWith('#') ? `#${clr}` : clr;
+
+    const bgColorFinal = formatColor(bgColor);
+    const titleColorFinal = formatColor(titleColor);
+    const statColorFinal = formatColor(statColor);
+    const borderColorFinal = formatColor(borderColor);
+    const glowColorFinal = formatColor(glowColor);
+
     // Extrai os Dados do GitHub usando a função getStats
     const { usuario, commits, prs, issues, repos, stars } = getStats(dados);
 
@@ -41,16 +49,16 @@ export const getSVG = (params, dados) => {
             <svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                     <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
-                        <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="${glowColor}" flood-opacity="0.4"/>
+                        <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="${glowColorFinal}" flood-opacity="0.4"/>
                     </filter>
                     ${(type !== 'stats') ? clipPath : ''}
                 </defs>
                 <style>
-                    .title { font: 600 18px 'Segoe UI', Ubuntu, sans-serif; fill: ${titleColor}; } 
-                    .stat { font: 600 14px 'Segoe UI', Ubuntu, sans-serif; fill: ${statColor}; }
-                    .lang-text { font: 500 13px 'Segoe UI', Ubuntu, sans-serif; fill: ${statColor}; }
+                    .title { font: 600 18px 'Segoe UI', Ubuntu, sans-serif; fill: ${titleColorFinal}; } 
+                    .stat { font: 600 14px 'Segoe UI', Ubuntu, sans-serif; fill: ${statColorFinal}; }
+                    .lang-text { font: 500 13px 'Segoe UI', Ubuntu, sans-serif; fill: ${statColorFinal}; }
                 </style>
-                <rect width="${width - 40}" height="${height - 40}" x="20" y="20" rx="25" fill="${bgColor}" stroke="${borderColor}" stroke-width="1.5" filter="url(#neonGlow)" />
+                <rect width="${width - 40}" height="${height - 40}" x="20" y="20" rx="25" fill="${bgColorFinal}" stroke="${borderColorFinal}" stroke-width="1.5" filter="url(#neonGlow)" />
                 <text x="45" y="55" class="title">${usuario.name}'s GitHub Stats</text>
                 ${rankBadgeSVG}
                 ${(type !== 'stats') ? barSVG : ''}
