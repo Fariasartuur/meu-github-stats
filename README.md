@@ -3,8 +3,10 @@
 Uma API Serverless desenvolvida em **Node.js** e hospedada na **Vercel** que gera cards de estatísticas dinâmicos com efeito Neon/Glassmorphism para perfis do GitHub.
 
 <div align="center">
-  <img src="https://meu-github-stats.vercel.app/api?bg=020618&t=d8b4fe&st=f3e8ff&bc=7e22ce&gc=7e22ce" alt="Estatísticas Demo" />
+  <img src="https://meu-github-stats.vercel.app/api?bg=020618&t=d8b4fe&st=f3e8ff&bc=7e22ce&gc=7e22ce&w=450" alt="Estatísticas Demo" />
 </div>
+
+> Url do Card acima: https://meu-github-stats.vercel.app/api?bg=020618&t=d8b4fe&st=f3e8ff&bc=7e22ce&gc=7e22ce&w=450
 
 ## 🛠️ Tecnologias Utilizadas
 
@@ -49,6 +51,8 @@ A API utiliza o protocolo **GraphQL** para extrair dados precisos com uma única
 
 A API aceita parâmetros via URL para customizar o tema sem precisar mexer no código:
 
+### Customização Normal
+
 | Parâmetro | Descrição | Exemplo |
 | :--- | :--- | :--- |
 | `bg` | Cor de fundo (Hex sem #) | `bg=000000` |
@@ -56,6 +60,42 @@ A API aceita parâmetros via URL para customizar o tema sem precisar mexer no c�
 | `st` | Cor dos textos | `st=ffffff` |
 | `bc` | Cor da borda | `bc=444444` |
 | `gc` | Cor do brilho (Glow) | `gc=7e22ce` |
+| `focus` | Linguagem de foco | `Java`
+| `type` | Tipo de card | `full` |
+
+### Larguras dos Cards
+
+| Parâmetro | Padrão | Minimo | Maximo | Tipo
+| :--- | :--- | :--- | :--- | :--- | 
+| `w` | `450` | `300` | `550` | Padrão |
+| `w` | `400` | `300` | `500` | `stats` |
+| `w` | `400` | `300` | `500` | `langs` |
+| `w` | `550` | `500` | `600` | `full` |
+
+
+### Altura dos cards
+
+Calculado automaticamente dependendo do número de linguagens ou de status. Pode ser alterada usando o parametro `h`. Não tem um limite.
+
+## Cards
+
+Existem alguns tipos de cards que podem ser alternados usando o parametro `type`.
+
+- Padrão
+
+<img src="https://meu-github-stats.vercel.app/api" alt="Estatísticas Demo" />
+
+- `stats`
+
+<img src="https://meu-github-stats.vercel.app/api?type=stats" alt="Estatísticas Demo" />
+
+- `langs`
+
+<img src="https://meu-github-stats.vercel.app/api?type=langs" alt="Estatísticas Demo" />
+
+- `full`
+
+<img src="https://meu-github-stats.vercel.app/api?type=full" alt="Estatísticas Demo" />
 
 **Exemplo de uso no Markdown:**
 ```markdown
