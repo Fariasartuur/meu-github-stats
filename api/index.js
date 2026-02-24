@@ -98,17 +98,25 @@ export default async function handle(req, res) {
 
         let currentBarX = 0;
         const barWidth = width - 90;
+        const barSegments = linguagensFinais.map((lang, index) => {
+            const isLast = index === linguagensFinais.length - 1;
+            const segmentWidth = isLast 
+                ? (barWidth - currentBarX) 
+                : (parseFloat(lang.porcentagem) / 100) * barWidth;
+            
+            const rect = `<rect x="${45 + currentBarX}" y="80" width="${segmentWidth}" height="8" fill="${lang.cor}" />`;
+            currentBarX += segmentWidth;
+            return rect;
+        }).join('');
+
         const languageBarSVG = `
-            <mask id="barMask">
-                <rect x="45" y="80" width="${barWidth}" height="8" rx="5" fill="white" />
-            </mask>
-            <g mask="url(#barMask)">
-                ${linguagensFinais.map((lang) => {
-                    const segmentWidth = (parseFloat(lang.porcentagem) / 100) * barWidth;
-                    const rect = `<rect x="${45 + currentBarX}" y="80" width="${segmentWidth}" height="8" fill="${lang.cor}" />`;
-                    currentBarX += segmentWidth;
-                    return rect;
-                }).join('')}
+            <defs>
+                <clipPath id="barClip">
+                    <rect x="45" y="80" width="${barWidth}" height="8" rx="4" />
+                </clipPath>
+            </defs>
+            <g clip-path="url(#barClip)">
+                ${barSegments}
             </g>
         `;
 
@@ -199,7 +207,7 @@ export default async function handle(req, res) {
                     <text x="42" y="15" text-anchor="middle" style="font: 700 10px sans-serif; fill: ${rankColor}; text-transform: uppercase;">${rank}</text>
                 </g>
                 ${(type !== 'stats') ? languageBarSVG : ''}
-                ${hideDefaultCommitText ? '' : `<text x="45" y="95" class="stat">🔥 Total de Commits: ${commits}</text>`}
+                ${hideDefaultCommitText ? '' : `<text x="45" y="115" class="stat">🔥 Total de Commits: ${commits}</text>`}
                 ${content}
             </svg>
         `;
