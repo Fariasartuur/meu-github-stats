@@ -119,14 +119,14 @@ export default async function handle(req, res) {
                 height = heightParam || (125 + Math.max(5, Math.ceil(linguagensFinais.length)) * 30);
                 hideDefaultCommitText = true;
                 content = `
-                    <g transform="translate(45, 115)">
+                    <g transform="translate(45, 120)">
                         <text y="0" class="stat">🔥 Commits: ${commits}</text>
                         <text y="25" class="stat">⭐ Stars: ${stars}</text>
                         <text y="50" class="stat">📂 Repos: ${repos}</text>
                         <text y="75" class="stat">🔀 PRs: ${prs}</text>
                         <text y="100" class="stat">🛠️ Issues: ${issues}</text>
                     </g>
-                    <g transform="translate(${width * 0.55}, 120)">
+                    <g transform="translate(${width * 0.55}, 115)">
                         ${linguagensFinais.map((lang, i) => renderLangItem(lang, i)).join('')}
                     </g>`;
                 break;
@@ -135,7 +135,7 @@ export default async function handle(req, res) {
                 hideDefaultCommitText = true;
                 if (linguagensFinais.length > 4) {
                     // DUAS COLUNAS PARA MAIS DE 4 LANGS
-                    height = heightParam || 200;
+                    height = heightParam || (110 + (linguagensFinais.length * 25) + 35);
                     const mid = Math.ceil(linguagensFinais.length / 2) + 1;
                     content = `
                         <g transform="translate(45, 115)">
