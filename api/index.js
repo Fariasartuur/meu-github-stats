@@ -6,9 +6,29 @@ export default async function handle(req, res) {
     const bgColor = req.query.bg ? `#${req.query.bg}` : '#3c0366';
     const titleColor = req.query.t ? `#${req.query.t}` : '#d8b4fe';
     const statColor = req.query.st ? `#${req.query.st}` : '#f3e8ff';
+    const width = Math.min(Math.max(parseInt(req.query.w) || 400, 300), 550);
+
+    const calculatedHeight = 120 + (linguagensFinais.length * 25) + 30;
+    const height = Math.min(Math.max(calculatedHeight, 150), 450);
 
     const borderColor = req.query.bc ? `#${req.query.bc}` : 'rgba(126, 34, 206, 0.5)';
     const glowColor = req.query.gc ? `#${req.query.gc}` : '#7e22ce';
+
+    const foco = req.query.focus ? req.query.focus.toLowerCase() : null;
+
+    let rank = 'Bronze';
+    let rankColor = '#cd7f32';
+
+    if (totalCommits >= 1500) {
+        rank = 'Diamante';
+        rankColor = '#00e5ff';
+    } else if (totalCommits > 1000) {
+        rank = 'Ouro';
+        rankColor = '#ffd700';
+    } else if (totalCommits > 400) {
+        rank = 'Prata';
+        rankColor = '#c0c0c0';
+    }
 
     if( !myUser || !token ) {
         return res.status(500).json({ erro: "Servidor mal configurado: Faltam variáveis." });
@@ -99,16 +119,20 @@ export default async function handle(req, res) {
         linguagensFinais.forEach((lang, index) => {
             let yPos = 130 + (index * 25);
 
+            const isFocus = foco === lang.nome.toLowerCase();
+            const glowStyle = isFocus ? `filter="drop-shadow(0 0 5px ${lang.cor})"` : '';
+            const focusIndicator = isFocus ? ' 🎯' : '';
+
             linguagensSVG += `
-                <g transform="translate(45, ${yPos})">
+                <g transform="translate(45, ${yPos})" ${glowStyle}>
                     <circle cx="5" cy="5" r="5" fill="${lang.cor}" />
-                    <text x="20" y="9" class="lang-text">${lang.nome} - ${lang.porcentagem}%</text>
+                    <text x="20" y="9" class="lang-text">${lang.nome} - ${lang.porcentagem}%${focusIndicator}</text>
                 </g>
             `;
         });
 
         const svgCard = `
-            <svg width="400" height="280" viewBox="0 0 400 280" xmlns="http://www.w3.org/2000/svg">
+            <svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                     <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
                         <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="${glowColor}" flood-opacity="0.4"/>
@@ -121,13 +145,19 @@ export default async function handle(req, res) {
                     .lang-text { font: 500 13px 'Segoe UI', Ubuntu, sans-serif; fill: ${statColor}; }
                 </style>
                 
-                <rect width="360" height="240" x="20" y="20" rx="25" 
+                <rect width="${width - 40}" height="${height - 40}" x="20" y="20" rx="25" 
                       fill="${bgColor}" 
                       stroke="${borderColor}"
                       stroke-width="1.5" 
                       filter="url(#neonGlow)" />
                 
                 <text x="45" y="55" class="title">${nome}'s GitHub Stats</text>
+
+                <g transform="translate(${width - 100}, 38)">
+                    <rect width="70" height="22" rx="11" fill="${rankColor}" fill-opacity="0.2" stroke="${rankColor}" stroke-width="1.2" />
+                    <text x="35" y="15" text-anchor="middle" style="font: 700 10px sans-serif; fill: ${rankColor}; text-transform: uppercase;">${rank}</text>
+                </g>
+
                 <text x="45" y="95" class="stat">🔥 Total de Commits: ${totalCommits}</text>
                 
                 ${linguagensSVG}
