@@ -121,7 +121,7 @@ export default async function handle(req, res) {
                       filter="url(#neonGlow)" />
                 
                 <text x="45" y="55" class="title">${nome}'s GitHub Stats</text>
-                <text x="45" y="95" class="stat">🔥 Total de Commits: ${commits}</text>
+                <text x="45" y="95" class="stat">🔥 Total de Commits: ${totalCommits}</text>
                 
                 ${linguagensSVG}
             </svg>
