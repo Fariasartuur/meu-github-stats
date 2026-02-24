@@ -1,0 +1,21 @@
+<svg width="500" height="100" viewBox="0 0 500 100" xmlns="http://www.w3.org/2000/svg">
+    <rect width="500" height="100" fill="#020618" />
+
+    <defs>
+        <clipPath id="barClip">
+            <rect x="45" y="45" width="410" height="8" rx="4" />
+        </clipPath>
+    </defs>
+
+    <g clip-path="url(#barClip)">
+        <rect x="45" y="45" width="164" height="8" fill="#b07219" />
+        
+        <rect x="209" y="45" width="143.5" height="8" fill="#3178c6" />
+        
+        <rect x="352.5" y="45" width="102.5" height="8" fill="#563d7c" />
+    </g>
+
+    <text x="45" y="75" font-family="Segoe UI, sans-serif" font-size="10" fill="#f3e8ff" opacity="0.7">
+        Java 40% | TypeScript 35% | CSS 25%
+    </text>
+</svg>

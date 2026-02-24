@@ -1,0 +1,17 @@
+<svg width="500" height="100" viewBox="0 0 500 100" xmlns="http://www.w3.org/2000/svg">
+    <rect width="500" height="100" fill="#020618" />
+
+    <style>
+        .lang-text {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 12px;
+            fill: #f3e8ff;
+            opacity: 0.8;
+        }
+    </style>
+
+    <g transform="translate(45, 40)">
+        <circle cx="5" cy="5" r="5" fill="#b07219" />
+        <text x="20" y="9" class="lang-text">Java - 28% 🎯</text>
+    </g>
+</svg>
